@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conta Bancária</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Conta Bancária</h1>
+        <h3>Saldo Atual: <span style="color: {% if balance < 0 %}red{% else %}black{% endif %};">R$ {{ balance | format_currency }}</span></h3>
+        <hr>
+        <h3>Histórico de Transações</h3>
+        <ul class="list-group">
+            {% for transaction in transactions %}
+            <li class="list-group-item">
+                {% if transaction[2] == 'deposit' %}
+                <span style="color: green;">+ R$ {{ transaction[1] | format_currency }}</span>
+                {% elif transaction[2] == 'withdraw' %}
+                <span style="color: red;">- R$ {{ -transaction[1] | format_currency }}</span>
+                {% endif %}
+                <span class="float-right">{{ transaction[3] }}</span>
+                <a href="/edit_transaction/{{ transaction[0] }}" class="btn btn-warning btn-sm ml-2">Editar</a>
+                <form action="/delete_transaction/{{ transaction[0] }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm ml-2">Excluir</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        <hr>
+        <h3>Realizar Transação</h3>
+        <form action="/add_transaction" method="POST" class="mb-4">
+            <div class="row justify-content-center">
+                <div class="form-group col-4">
+                    <label for="amount">Valor:</label>
+                    <input type="number" step="0.01" min="0" name="amount" id="amount" class="form-control" required>
+                </div>
+                <div class="form-group col-4">
+                    <label for="transaction_type">Tipo:</label>
+                    <select name="transaction_type" id="transaction_type" class="form-control" required>
+                        <option value="deposit">Depósito</option>
+                        <option value="withdraw">Saque</option>
+                    </select>
+                </div>
+                <div class="form-group col-2 align-self-end">
+                    <button type="submit" class="btn btn-primary btn-block">Adicionar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

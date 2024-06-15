@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Transação</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">Editar Transação</h1>
+        <form action="/update_transaction/{{ transaction[0] }}" method="POST" class="mb-4">
+            <div class="form-group">
+                <label for="amount">Valor:</label>
+                <input type="number" step="0.01" min="0" name="amount" id="amount" class="form-control" value="{{ abs(transaction[1]) }}" required>
+            </div>
+            <div class="form-group">
+                <label for="transaction_type">Tipo:</label>
+                <select name="transaction_type" id="transaction_type" class="form-control" required>
+                    <option value="deposit" {% if transaction[2] == 'deposit' %}selected{% endif %}>Depósito</option>
+                    <option value="withdraw" {% if transaction[2] == 'withdraw' %}selected{% endif %}>Saque</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <a href="/" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
